@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catologue -- Your Cat Breed Compass</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f1ec;
+  --bg-accent: #ece5dd;
+  --surface: rgba(255,255,255,0.85);
+  --surface-solid: #ffffff;
+  --border: #e0d8d0;
+  --border-hover: #c8beb4;
+  --text: #1a1612;
+  --text-secondary: #6a5e52;
+  --text-tertiary: #a0968a;
+  --accent: #3d7e7a;
+  --accent-light: #e8f2f1;
+  --accent-dark: #1e4f4b;
+  --accent-glow: rgba(61,126,122,0.15);
+  --pro: #3a7a4e;
+  --con: #a84a3a;
+  --gold: #c49a6a;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.03);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+  --radius: 12px;
+  --radius-lg: 20px;
+  --transition: 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+  --header-grad: linear-gradient(135deg, #1a2e2c 0%, #2d5a56 50%, #3d7e7a 100%);
+  --header-glow: rgba(61,126,122,0.3);
+}
+[data-theme="dark"] {
+  --bg: #141210;
+  --bg-accent: #1a1815;
+  --surface: rgba(30,28,25,0.9);
+  --surface-solid: #1e1c19;
+  --border: #2a2824;
+  --border-hover: #3a3834;
+  --text: #e8e4de;
+  --text-secondary: #9a9288;
+  --text-tertiary: #5a5448;
+  --accent: #5aaeaa;
+  --accent-light: #1a302e;
+  --accent-dark: #8acac6;
+  --accent-glow: rgba(90,174,170,0.15);
+  --pro: #5aaa6e;
+  --con: #d47a6a;
+  --gold: #d4b07a;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.15);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.2);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.25);
+  --header-grad: linear-gradient(135deg, #0a1a18 0%, #1a3835 50%, #2a5a56 100%);
+  --header-glow: rgba(90,174,170,0.2);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  font-size: 16px;
+  line-height: 1.6;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+::selection { background: var(--accent); color: var(--surface-solid); }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--text-tertiary); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+
+/* Header */
+header {
+  background: var(--header-grad);
+  padding: 2.8rem 2rem 2.3rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 30px var(--header-glow);
+}
+.header-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 20% 30%, rgba(255,255,255,0.05) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 70%, rgba(255,255,255,0.03) 0%, transparent 50%);
+  pointer-events: none;
+}
+.theme-toggle {
+  position: absolute; top: 1rem; right: 1.2rem;
+  width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; cursor: pointer; z-index: 5;
+  backdrop-filter: blur(8px); transition: all var(--transition);
+}
+.theme-toggle:hover { background: rgba(255,255,255,0.15); color: #fff; transform: rotate(30deg); }
+header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.03em;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.2);
+  position: relative;
+}
+header h1 span {
+  background: linear-gradient(135deg, #7ad4c0, #b8e8da);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+header p {
+  color: rgba(255,255,255,0.7);
+  font-size: 1.05rem;
+  margin-top: 0.4rem;
+  font-weight: 400;
+  position: relative;
+}
+
+.container { max-width: 1320px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+/* Glass utility */
+.glass {
+  background: var(--surface); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+}
+
+/* Loading */
+#status { text-align: center; padding: 5rem 2rem; color: var(--text-secondary); }
+.loading-skeleton {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.25rem;
+  max-width: 1320px; margin: 0 auto; padding: 0 1.5rem;
+}
+.skel-card {
+  background: var(--surface); border-radius: var(--radius-lg); overflow: hidden;
+  border: 1px solid var(--border);
+}
+.skel-img { height: 200px; background: linear-gradient(90deg, var(--border) 25%, #f0eae4 50%, var(--border) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+.skel-body { padding: 1.25rem; }
+.skel-line { height: 12px; background: linear-gradient(90deg, var(--border) 25%, #f0eae4 50%, var(--border) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 6px; margin-bottom: 10px; }
+.skel-line:first-child { width: 55%; height: 18px; }
+.skel-line:nth-child(2) { width: 35%; }
+.skel-line:nth-child(3) { width: 85%; }
+.skel-line:nth-child(4) { width: 65%; }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+.spinner {
+  display: inline-block; width: 36px; height: 36px;
+  border: 3px solid var(--border); border-top-color: var(--accent);
+  border-radius: 50%; animation: spin 0.7s linear infinite;
+}
+
+/* Controls */
+.controls {
+  display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;
+  margin-bottom: 1.5rem; justify-content: center;
+}
+.controls input, .controls select {
+  padding: 0.6rem 1rem; border: 1.5px solid var(--border);
+  border-radius: 8px; font-size: 0.85rem; font-family: 'Inter', sans-serif;
+  background: var(--surface); color: var(--text);
+  transition: border-color var(--transition), box-shadow var(--transition), background 0.4s;
+  backdrop-filter: blur(12px);
+}
+.controls input:focus, .controls select:focus {
+  outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.controls input { flex: 1; min-width: 200px; max-width: 320px; }
+.controls input::placeholder { color: var(--text-tertiary); }
+
+/* Tabs */
+.tab-bar {
+  display: flex; gap: 0; margin-bottom: 1.5rem;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden;
+  backdrop-filter: blur(12px);
+  transition: background 0.4s;
+}
+.tab-btn {
+  flex: 1; padding: 0.7rem 1.2rem; border: none;
+  background: transparent; font-family: 'Inter', sans-serif;
+  font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);
+  cursor: pointer; transition: all var(--transition); position: relative;
+}
+.tab-btn:hover { color: var(--text); background: var(--bg-accent); }
+.tab-btn.active { color: var(--accent-dark); background: transparent; font-weight: 700; }
+.tab-btn.active::after {
+  content: ''; position: absolute; bottom: 0; left: 20%; right: 20%;
+  height: 2px; background: var(--accent); border-radius: 2px 2px 0 0;
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Count */
+.count-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem;
+}
+.count-bar .count {
+  font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;
+}
+.count-bar .note {
+  font-size: 0.75rem; color: var(--text-tertiary);
+}
+
+.theme-attribution {
+  text-align: center; font-size: 0.7rem; color: var(--text-tertiary); margin-bottom: 0.5rem;
+}
+
+/* Grid */
+.grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.25rem;
+}
+
+/* Card */
+.card {
+  background: var(--surface); border-radius: var(--radius-lg); overflow: hidden;
+  cursor: pointer; border: 1px solid var(--border);
+  opacity: 0; transform: translateY(16px);
+  transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.5s ease, border-color 0.35s ease, background 0.4s;
+  display: flex; flex-direction: column;
+  will-change: transform, opacity;
+  content-visibility: auto;
+  contain: style layout;
+  backdrop-filter: blur(12px);
+}
+.card.visible { opacity: 1; transform: translateY(0); transition-delay: calc(var(--i,0) * 30ms); }
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 30px var(--accent-glow), var(--shadow-lg);
+  border-color: var(--accent);
+}
+.card.visible { opacity: 1; transform: translateY(0); transition-delay: calc(var(--i,0) * 30ms); }
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-hover);
+}
+.card-body { padding: 1.25rem 1.5rem 1.5rem; flex: 1; display: flex; flex-direction: column; }
+
+.card h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem; font-weight: 700; color: var(--text);
+  margin-bottom: 0.15rem;
+}
+.origin-badge {
+  display: inline-flex; align-items: center; gap: 0.25rem;
+  font-size: 0.78rem; color: var(--text-secondary);
+  background: var(--bg); padding: 0.2rem 0.6rem; border-radius: 4px;
+  font-weight: 500; margin-bottom: 0.6rem; width: fit-content;
+}
+.about-text {
+  font-size: 0.85rem; line-height: 1.6; color: var(--text-secondary);
+  margin-bottom: 0.8rem;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.meta-row {
+  display: flex; gap: 0.5rem; margin-bottom: 0.7rem; flex-wrap: wrap;
+}
+.meta-row span {
+  background: var(--bg); padding: 0.25rem 0.65rem; border-radius: 4px;
+  font-size: 0.78rem; color: var(--text-secondary); font-weight: 600;
+}
+.lifespan-tag {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.3rem 0.8rem; border-radius: 99px;
+  font-size: 0.8rem; font-weight: 600;
+  background: var(--accent-light); color: var(--accent-dark);
+  margin-bottom: 0.7rem; width: fit-content;
+}
+.price-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0.7rem; padding: 0.5rem 0.9rem 0.5rem 1rem;
+  background: var(--accent-light); border-radius: 8px;
+}
+.price-row .label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); font-weight: 700; }
+.price-row .value { font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--accent-dark); }
+
+.quick-compare {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem;
+  padding-top: 0.85rem; border-top: 1px solid var(--border); margin-top: auto;
+}
+.quick-compare h3 {
+  font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em;
+  font-weight: 700; margin-bottom: 0.2rem;
+}
+.quick-compare .pros h3 { color: var(--pro); }
+.quick-compare .cons h3 { color: var(--con); }
+.quick-compare ul { list-style: none; }
+.quick-compare li {
+  font-size: 0.78rem; padding: 0.1rem 0; padding-left: 1rem;
+  position: relative; line-height: 1.4;
+}
+.quick-compare .pros li::before { content: "+"; color: var(--pro); font-weight: 700; position: absolute; left: 0; }
+.quick-compare .cons li::before { content: "-"; color: var(--con); font-weight: 700; position: absolute; left: 0; }
+
+.view-link {
+  text-align: center; font-size: 0.75rem; color: var(--text-tertiary);
+  margin-top: 0.7rem; padding-top: 0.7rem;
+  border-top: 1px solid var(--border); font-weight: 500;
+  transition: color var(--transition);
+}
+.card:hover .view-link { color: var(--accent); }
+
+/* Carousel */
+.carousel {
+  position: relative; overflow: hidden; flex-shrink: 0;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.carousel-track {
+  display: flex; transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+  will-change: transform; cursor: grab;
+}
+.carousel-track.dragging { transition: none !important; cursor: grabbing; }
+.carousel-track img, .carousel-track .carousel-placeholder { width: 100%; flex-shrink: 0; pointer-events: none; }
+.card .carousel { height: 200px; background: var(--bg); border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+.card .carousel-track img, .card .carousel-track .carousel-placeholder { height: 200px; object-fit: contain; background: var(--bg); }
+.modal .carousel { height: 360px; border-radius: var(--radius-lg) var(--radius-lg) 0 0; background: var(--bg); }
+.modal .carousel-track img, .modal .carousel-track .carousel-placeholder { height: 360px; object-fit: contain; background: var(--bg); }
+.carousel-placeholder {
+  background: linear-gradient(135deg, var(--border), #e0d8d0);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--text-tertiary);
+}
+.img-shimmer { background: linear-gradient(90deg, var(--border) 25%, #f0eae4 50%, var(--border) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+
+.carousel-count {
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(0,0,0,0.45); color: #fff;
+  font-size: 0.62rem; font-weight: 600; padding: 0.15rem 0.45rem;
+  border-radius: 4px; z-index: 5; backdrop-filter: blur(4px);
+  pointer-events: none;
+}
+.carousel-btn {
+  position: absolute; top: 50%; transform: translateY(-50%) scale(0.85);
+  width: 34px; height: 34px; border-radius: 50%; border: none;
+  background: rgba(0,0,0,0.55); color: #fff;
+  font-size: 1.1rem; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 5;
+  transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  opacity: 0; pointer-events: none;
+  backdrop-filter: blur(4px);
+}
+.carousel[data-count="1"] .carousel-btn { display: none; }
+.carousel:hover .carousel-btn, .carousel.show-btns .carousel-btn { opacity: 1; transform: translateY(-50%) scale(1); pointer-events: auto; }
+.carousel-btn:hover { background: rgba(0,0,0,0.75); transform: translateY(-50%) scale(1.15) !important; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+.carousel-btn:active { transform: translateY(-50%) scale(0.9) !important; transition-duration: 0.08s; }
+.carousel-btn.prev { left: 8px; }
+.carousel-btn.next { right: 8px; }
+[data-theme="dark"] .carousel-btn { background: rgba(255,255,255,0.65); color: #000; }
+[data-theme="dark"] .carousel-btn:hover { background: rgba(255,255,255,0.85); }
+.carousel-dots {
+  position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 5px; z-index: 5; pointer-events: none;
+}
+.carousel-dot {
+  width: 6px; height: 6px; border-radius: 50%; border: none;
+  background: rgba(0,0,0,0.25); cursor: pointer; padding: 0;
+  transition: background 0.35s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: auto; box-shadow: 0 0 0 1px rgba(255,255,255,0.3);
+}
+.carousel-dot.active { background: var(--accent); transform: scale(1.5); box-shadow: 0 0 0 1px rgba(255,255,255,0.5); }
+.carousel-dot:hover { background: var(--accent-dark); transform: scale(1.3); }
+[data-theme="dark"] .carousel-dot { background: rgba(255,255,255,0.3); box-shadow: 0 0 0 1px rgba(0,0,0,0.2); }
+[data-theme="dark"] .carousel-dot.active { background: var(--accent); }
+
+/* Modal */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0); z-index: 1000;
+  justify-content: center; align-items: flex-start;
+  padding: 2rem; overflow-y: auto; backdrop-filter: blur(0px);
+  transition: background 0.3s ease, backdrop-filter 0.3s ease;
+}
+.modal-overlay.open { display: flex; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); animation: overlayFade 0.3s ease; }
+@keyframes overlayFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal {
+  background: var(--surface); border-radius: var(--radius-lg);
+  max-width: 780px; width: 100%; margin: auto;
+  box-shadow: 0 25px 80px rgba(0,0,0,0.2);
+  animation: slideUp 0.4s var(--transition); position: relative; overflow: hidden;
+  backdrop-filter: blur(20px);
+  transition: background 0.4s;
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.modal-close {
+  position: absolute; top: 12px; right: 12px;
+  width: 36px; height: 36px; border-radius: 50%; border: none;
+  background: rgba(0,0,0,0.55); cursor: pointer;
+  font-size: 1.1rem; font-weight: 700; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform var(--transition), background 0.2s;
+  z-index: 10; box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+  backdrop-filter: blur(4px);
+}
+.modal-close:hover { transform: scale(1.12); background: rgba(0,0,0,0.75); }
+[data-theme="dark"] .modal-close { background: rgba(255,255,255,0.6); color: #000; }
+[data-theme="dark"] .modal-close:hover { background: rgba(255,255,255,0.8); }
+.modal-body { padding: 2rem 2.5rem; }
+.modal-body h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem; font-weight: 700; color: var(--text); margin-bottom: 0.2rem;
+}
+.modal-body .origin { font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 0.9rem; }
+
+.modal-about {
+  font-size: 0.92rem; line-height: 1.65; color: var(--text-secondary);
+  margin-bottom: 1.25rem; padding: 0.85rem 1.1rem;
+  background: var(--bg); border-radius: 8px; border-left: 3px solid var(--accent);
+}
+
+.stat-strip {
+  display: flex; gap: 1rem; flex-wrap: wrap;
+  margin-bottom: 1.25rem; padding: 0.85rem 1.1rem;
+  background: var(--bg); border-radius: 8px;
+}
+.stat-strip .item { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 70px; }
+.stat-strip .num { font-size: 1.2rem; font-weight: 700; color: var(--text); font-family: 'Inter', sans-serif; }
+.stat-strip .label { font-size: 0.68rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; margin-top: 2px; }
+
+.modal-buy {
+  margin-bottom: 1.5rem; padding: 1rem 1.2rem;
+  background: var(--accent-light); border-radius: 8px;
+}
+.modal-buy h3 { font-size: 0.88rem; font-weight: 700; color: var(--accent-dark); margin-bottom: 0.4rem; }
+.modal-buy .price-line { display: flex; align-items: baseline; gap: 0.5rem; margin-bottom: 0.35rem; }
+.modal-buy .price-line .lbl { font-size: 0.82rem; color: var(--accent); font-weight: 600; }
+.modal-buy .price-line .val { font-size: 1.3rem; font-weight: 700; color: var(--accent-dark); font-family: 'Inter', sans-serif; }
+.modal-buy p { font-size: 0.85rem; color: var(--accent-dark); line-height: 1.55; opacity: 0.85; }
+
+.section { margin-bottom: 1.75rem; }
+.section:last-child { margin-bottom: 0; }
+.section h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem; font-weight: 700; color: var(--text);
+  margin-bottom: 0.8rem; padding-bottom: 0.35rem;
+  border-bottom: 1.5px solid var(--border);
+}
+
+/* Care grid */
+.care-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+@media (max-width: 640px) { .care-grid { grid-template-columns: 1fr; } }
+.care-item { background: var(--bg); border-radius: 8px; padding: 0.85rem 1rem; }
+.care-item h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-dark); font-weight: 700; margin-bottom: 0.25rem; }
+.care-item p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; }
+
+/* Products grid */
+.prod-grid { display: flex; flex-direction: column; gap: 0.65rem; }
+.prod-item {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  padding: 0.85rem 1rem;
+  transition: transform var(--transition), box-shadow var(--transition);
+  display: flex; gap: 0.8rem; align-items: flex-start;
+}
+.prod-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); border-color: var(--accent); }
+.prod-icon {
+  width: 30px; height: 30px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 700; flex-shrink: 0;
+  margin-top: 2px;
+}
+.prod-body { flex: 1; min-width: 0; }
+.prod-body h4 {
+  font-size: 0.82rem; font-weight: 700; color: var(--text);
+  margin-bottom: 0.15rem;
+}
+.prod-body p {
+  font-size: 0.85rem; color: var(--text-secondary); line-height: 1.55;
+}
+.prod-body p strong { color: var(--text); font-weight: 600; }
+
+.shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.shop-link {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.65rem 0.9rem; background: var(--bg); border-radius: 8px;
+  text-decoration: none; color: var(--text);
+  font-size: 0.8rem; font-weight: 600;
+  border: 1px solid var(--border);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+.shop-link:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); border-color: var(--accent); }
+.shop-link .shop-icon {
+  width: 32px; height: 32px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; font-weight: 700; flex-shrink: 0;
+}
+.shop-link .shop-name { flex: 1; }
+
+/* Trait bars */
+.trait-bar { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.6rem; }
+.trait-bar .lbl { width: 130px; font-size: 0.85rem; color: var(--text); font-weight: 500; flex-shrink: 0; }
+.trait-bar .bar { flex: 1; height: 7px; background: var(--border); border-radius: 99px; overflow: hidden; }
+.trait-bar .fill { height: 100%; border-radius: 99px; transition: width 0.6s ease; background: var(--accent); }
+.trait-bar .sc { width: 28px; text-align: right; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); flex-shrink: 0; }
+
+/* Pros/Cons in modal */
+.modal-pc { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.modal-pc h3 { font-size: 0.92rem; font-weight: 700; margin-bottom: 0.4rem; border: none; padding: 0; }
+.modal-pc .pros h3 { color: var(--pro); }
+.modal-pc .cons h3 { color: var(--con); }
+.modal-pc ul { list-style: none; }
+.modal-pc li { padding: 0.25rem 0; font-size: 0.88rem; padding-left: 1.3rem; position: relative; line-height: 1.45; }
+.modal-pc .pros li::before { content: "+"; color: var(--pro); font-weight: 700; position: absolute; left: 0; }
+.modal-pc .cons li::before { content: "-"; color: var(--con); font-weight: 700; position: absolute; left: 0; }
+
+/* Leaderboard */
+.lb-header { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; margin-bottom: 1.25rem; }
+.lb-header select {
+  padding: 0.5rem 0.9rem; border: 1.5px solid var(--border); border-radius: 8px;
+  font-size: 0.82rem; font-family: 'Inter', sans-serif; background: var(--surface);
+  color: var(--text); font-weight: 500; transition: border-color var(--transition);
+}
+.lb-header select:focus { outline: none; border-color: var(--accent); }
+
+.podium {
+  display: grid; grid-template-columns: 1fr 1.15fr 1fr;
+  gap: 0.75rem; margin-bottom: 1.25rem; align-items: end;
+}
+.podium-card {
+  background: var(--surface); border-radius: 12px;
+  border: 1px solid var(--border); padding: 0.9rem 0.75rem;
+  text-align: center; cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition);
+  will-change: transform;
+}
+.podium-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.podium-card.gold { border-color: var(--gold); background: linear-gradient(180deg, var(--surface), #fdf6ee); padding-top: 1.3rem; }
+.podium-card .rank { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 800; line-height: 1; margin-bottom: 0.15rem; }
+.podium-card.gold .rank { color: var(--gold); font-size: 1.8rem; }
+.podium-img { width: 100%; height: 80px; object-fit: cover; display: block; background: var(--bg); margin-bottom: 0.3rem; border-radius: 4px; }
+.podium-plh { display: flex; align-items: center; justify-content: center; font-size: 1rem; color: var(--text-tertiary); height: 80px; background: var(--bg); border-radius: 4px; margin-bottom: 0.3rem; }
+.podium-card .name { font-size: 0.82rem; font-weight: 700; color: var(--text); margin-bottom: 0.15rem; }
+.podium-card .sc { font-size: 0.68rem; color: var(--text-secondary); background: var(--bg); padding: 0.1rem 0.5rem; border-radius: 99px; display: inline-block; }
+.podium-card .medal { position: absolute; top: 3px; left: 6px; font-size: 0.85rem; }
+
+.lb-list { display: flex; flex-direction: column; gap: 0.35rem; }
+.lb-row {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.5rem 0.9rem; background: var(--surface);
+  border-radius: 8px; border: 1px solid var(--border);
+  cursor: pointer; transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  animation: fadeUp 0.35s ease both; will-change: transform;
+}
+.lb-row:hover { transform: translateX(3px); box-shadow: var(--shadow-sm); border-color: var(--border-hover); }
+.lb-row:nth-child(1) { animation-delay: 0.02s; } .lb-row:nth-child(2) { animation-delay: 0.05s; }
+.lb-row:nth-child(3) { animation-delay: 0.08s; } .lb-row:nth-child(4) { animation-delay: 0.11s; }
+.lb-row:nth-child(5) { animation-delay: 0.14s; } .lb-row:nth-child(6) { animation-delay: 0.17s; }
+.lb-row:nth-child(7) { animation-delay: 0.2s; } .lb-row:nth-child(8) { animation-delay: 0.23s; }
+.lb-row:nth-child(9) { animation-delay: 0.26s; } .lb-row:nth-child(10) { animation-delay: 0.29s; }
+.lb-row .pos { width: 24px; font-weight: 600; font-size: 0.8rem; color: var(--text-secondary); text-align: center; flex-shrink: 0; }
+.lb-row .rname { flex: 1; font-weight: 600; font-size: 0.82rem; color: var(--text); }
+.lb-row .bar { width: 80px; height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; flex-shrink: 0; }
+.lb-row .bar .fill { height: 100%; border-radius: 99px; }
+.lb-row .rsc { font-size: 0.72rem; color: var(--text-secondary); font-weight: 600; flex-shrink: 0; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Guide */
+.guide-content {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;
+}
+.guide-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 1.1rem 1.2rem;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.guide-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+.guide-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem; font-weight: 700; color: var(--accent-dark);
+  margin-bottom: 0.4rem;
+}
+.guide-card p {
+  font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary);
+}
+.guide-card ul { list-style: none; padding: 0; }
+.guide-card li {
+  font-size: 0.85rem; padding: 0.25rem 0; padding-left: 1.1rem;
+  position: relative; color: var(--text-secondary); line-height: 1.45;
+}
+.guide-card li::before {
+  content: "";
+  position: absolute; left: 0; top: 0.55rem;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--accent);
+}
+
+/* Supplies */
+.supplies-content {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;
+}
+.supply-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 1rem 1.2rem;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.supply-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+.supply-card.wide { grid-column: 1 / -1; }
+.supply-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.9rem; font-weight: 700; color: var(--accent-dark);
+  margin-bottom: 0.35rem;
+}
+.supply-card p {
+  font-size: 0.85rem; line-height: 1.6; color: var(--text-secondary);
+  margin-bottom: 0.6rem;
+}
+.supply-card p strong { color: var(--text); font-weight: 600; }
+.supply-links {
+  display: flex; gap: 0.5rem; flex-wrap: wrap;
+}
+.supply-links a {
+  font-size: 0.72rem; font-weight: 600; color: var(--accent);
+  text-decoration: none; padding: 0.2rem 0.6rem;
+  background: var(--accent-light); border-radius: 4px;
+  transition: background var(--transition), color var(--transition);
+}
+.supply-links a:hover { background: var(--accent); color: #fff; }
+.supply-table {
+  width: 100%; border-collapse: collapse; font-size: 0.8rem;
+  margin-top: 0.4rem;
+}
+.supply-table th, .supply-table td {
+  padding: 0.5rem 0.6rem; text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.supply-table th {
+  font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--text-secondary); font-weight: 700;
+}
+.supply-table td { color: var(--text-secondary); }
+.supply-table td:first-child { font-weight: 600; color: var(--text); }
+.supply-table a { color: var(--accent); text-decoration: none; }
+.supply-table a:hover { text-decoration: underline; }
+
+/* Match */
+.match-layout { display: grid; grid-template-columns: 320px 1fr; gap: 1.25rem; align-items: start; }
+.match-filters {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: 1.2rem 1.2rem 1rem; position: sticky; top: 1rem;
+}
+.match-filters h3 { font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; color:var(--text); margin-bottom:0.2rem; }
+.match-desc { font-size:0.75rem; color:var(--text-secondary); margin-bottom:1rem; line-height:1.4; }
+.match-group { margin-bottom:0.85rem; }
+.match-group label { display:block; font-size:0.72rem; font-weight:700; color:var(--text); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.3rem; }
+.range-row { display:flex; align-items:center; gap:0.5rem; font-size:0.65rem; color:var(--text-tertiary); }
+.range-row input[type=range] { flex:1; accent-color:var(--accent); height:4px; cursor:pointer; }
+.range-val { min-width:32px; text-align:right; font-size:0.7rem; font-weight:700; color:var(--accent-dark); }
+.match-reset { width:100%; margin-top:0.5rem; padding:0.45rem; border:1px solid var(--border); border-radius:6px; background:var(--bg); font-family:'Inter',sans-serif; font-size:0.75rem; font-weight:600; color:var(--text-secondary); cursor:pointer; transition:all var(--transition); }
+.match-reset:hover { border-color:var(--accent); color:var(--accent); background:var(--accent-light); }
+
+.match-results { min-height:300px; }
+.match-placeholder { text-align:center; padding:4rem 2rem; color:var(--text-tertiary); font-size:0.9rem; }
+.match-podium { display:grid; grid-template-columns:1fr 1.15fr 1fr; gap:0.75rem; margin-bottom:1.25rem; align-items:end; }
+.m-pod-card {
+  background:var(--surface); border-radius:12px; border:1px solid var(--border);
+  text-align:center; cursor:pointer; overflow:hidden;
+  transition:transform var(--transition), box-shadow var(--transition);
+}
+.m-pod-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-md); }
+.m-pod-card.m-gold { border-color:var(--gold); padding-top:0.5rem; }
+.m-pod-rank { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:800; color:var(--text-tertiary); }
+.m-pod-card.m-gold .m-pod-rank { color:var(--gold); font-size:1.8rem; }
+.m-pod-img { width:100%; height:100px; object-fit:cover; display:block; background:var(--bg); margin-top:0.3rem; }
+.m-pod-plh { display:flex; align-items:center; justify-content:center; font-size:1.2rem; color:var(--text-tertiary); }
+.m-pod-name { font-size:0.8rem; font-weight:700; color:var(--text); padding:0.3rem 0.5rem 0.1rem; }
+.m-pod-sc { font-size:0.7rem; color:var(--text-secondary); padding-bottom:0.5rem; }
+.match-list-label { font-size:0.75rem; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem; }
+.match-list { display:flex; flex-direction:column; gap:0.35rem; }
+.match-row {
+  display:flex; align-items:center; gap:0.75rem; padding:0.5rem 0.9rem;
+  background:var(--surface); border-radius:8px; border:1px solid var(--border);
+  cursor:pointer; animation:fadeUp 0.35s ease both;
+  transition:transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+.match-row:hover { transform:translateX(3px); box-shadow:var(--shadow-sm); border-color:var(--accent); }
+.match-row .m-pos { width:24px; font-weight:700; font-size:0.8rem; color:var(--text-secondary); text-align:center; flex-shrink:0; }
+.match-row .m-name { flex:1; font-weight:600; font-size:0.82rem; color:var(--text); }
+.match-row .m-bar { width:80px; height:5px; background:var(--border); border-radius:99px; overflow:hidden; flex-shrink:0; }
+.match-row .m-fill { height:100%; border-radius:99px; }
+.match-row .m-sc { font-size:0.72rem; color:var(--text-secondary); font-weight:700; flex-shrink:0; min-width:36px; text-align:right; }
+
+@media (max-width:800px) { .match-layout { grid-template-columns:1fr; } .match-filters { position:static; } }
+
+footer {
+  text-align: center; padding: 2.5rem 2rem;
+  color: var(--text-tertiary); font-size: 0.75rem;
+  border-top: 1px solid var(--border); margin-top: 0.5rem;
+}
+footer .sources { max-width:600px; margin:0 auto 0.8rem; line-height:1.6; }
+footer .sources strong { color:var(--text-secondary); font-weight:600; }
+footer a { color: var(--text-secondary); text-decoration: none; transition: color var(--transition); }
+footer a:hover { color: var(--text); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  .card { opacity: 1 !important; transform: none !important; }
+}
+@media (max-width: 640px) {
+  header h1 { font-size: 1.8rem; }
+  .grid { grid-template-columns: 1fr; }
+  .modal-body { padding: 1.25rem 1.5rem; }
+  .modal .carousel { height: 240px; }
+  .modal .carousel-track img, .modal .carousel-track .carousel-placeholder { height: 240px; }
+  .care-grid, .prod-grid, .modal-pc { grid-template-columns: 1fr; }
+  .guide-content, .supplies-content { grid-template-columns: 1fr; }
+  .podium { grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; }
+  .podium-card { padding: 0.6rem; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-bg"></div>
+  <div class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">&#9790;</div>
+  <h1>Cat<span>ologue</span></h1>
+  <p>Every breed, every purr &mdash; find your perfect feline companion</p>
+</header>
+
+<div id="status"><div class="spinner"></div><p style="margin-top:0.8rem;font-size:0.9rem">Loading cat breeds...</p></div>
+<div class="loading-skeleton" id="skeleton"></div>
+
+<div class="container" id="content" style="display:none">
+  <div class="controls">
+    <input type="text" id="search" placeholder="Search breeds..." oninput="debounceRender()">
+    <select id="sort" onchange="renderCats()">
+      <option value="name">Name</option>
+      <option value="family_friendly">Family Friendly</option>
+      <option value="playfulness">Playfulness</option>
+      <option value="intelligence">Intelligence</option>
+      <option value="children_friendly">Best with Children</option>
+      <option value="shedding">Least Shedding</option>
+    </select>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('browse')">Browse</button>
+    <button class="tab-btn" onclick="switchTab('leaderboard')">Leaderboards</button>
+    <button class="tab-btn" onclick="switchTab('guide')">Before Buying</button>
+    <button class="tab-btn" onclick="switchTab('match')">Cat Supplies</button>
+    <button class="tab-btn" onclick="switchTab('supplies')">Find Your Match</button>
+  </div>
+  <div class="tab-content active" id="tabBrowse">
+    <div class="count-bar">
+      <span class="count" id="count"></span>
+      <span class="note" id="fetchNote"></span>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+  <div class="tab-content" id="tabLeaderboard">
+    <div class="lb-header">
+      <select id="lbCategory" onchange="renderLeaderboard()">
+        <option value="children_friendly">Best with Children</option>
+        <option value="least_maintenance">Least Maintenance</option>
+        <option value="playfulness">Most Playful</option>
+        <option value="family_friendly">Most Affectionate</option>
+        <option value="intelligence">Most Intelligent</option>
+        <option value="other_pets_friendly">Best with Pets</option>
+        <option value="most_popular">Most Popular</option>
+      </select>
+    </div>
+    <div id="leaderboardContent"></div>
+  </div>
+  <div class="tab-content" id="tabGuide">
+    <div class="guide-content">
+      <div class="guide-card">
+        <h3>Lifestyle Fit</h3>
+        <p>Match energy levels: active breeds need engaged owners, calm breeds suit relaxed homes. Cats live 12-20 years -- choose for the long haul.</p>
+      </div>
+      <div class="guide-card">
+        <h3>Financial Commitment</h3>
+        <p>$500-2,000+/yr for food, litter, vet care. Purebreds: $500-3,000 upfront. Pet insurance: $15-40/mo. Budget for emergencies.</p>
+      </div>
+      <div class="guide-card">
+        <h3>Space &amp; Environment</h3>
+        <p>Most cats adapt to apartments. Active breeds need vertical space (trees, shelves). Cat-proof your home -- secure windows, remove toxic plants.</p>
+      </div>
+      <div class="guide-card">
+        <h3>Time &amp; Attention</h3>
+        <p>30-60 min play daily. Social breeds hate being alone -- consider a pair if you work long hours. Add 15-30 min for feeding, grooming, litter.</p>
+      </div>
+      <div class="guide-card">
+        <h3>Family &amp; Children</h3>
+        <p>Some breeds are kid-friendly, others prefer adults. Check children-friendly ratings. Supervise all cat-child interactions.</p>
+      </div>
+      <div class="guide-card">
+        <h3>Other Pets</h3>
+        <p>Choose pet-friendly breeds if you have other animals. Introduce gradually over 1-2 weeks with scent swapping.</p>
+      </div>
+      <div class="guide-card">
+        <h3>Grooming &amp; Shedding</h3>
+        <p>Long-hair: daily brush + pro grooming ($30-80/session). Heavy shedders need frequent vacuuming. Higher grooming rating = less effort.</p>
+      </div>
+      <div class="guide-card">
+        <h3>Health &amp; Lifespan</h3>
+        <p>Research breed-specific conditions. Choose a breeder who provides health screenings. Regular vet care and quality diet extend lifespan.</p>
+      </div>
+      <div class="guide-card">
+        <h3>Adoption vs. Breeder</h3>
+        <p>Shelters: $50-200, includes vaccines and spay/neuter. Breeders: predictable temperament, higher cost. Avoid online-only sellers.</p>
+      </div>
+      <div class="guide-card">
+        <h3>Preparation Checklist</h3>
+        <ul>
+          <li>Ceramic or steel food/water bowls</li>
+          <li>Quality cat food (age-appropriate)</li>
+          <li>Litter box + unscented clumping litter</li>
+          <li>Scratching post or cat tree</li>
+          <li>Comfortable bed in a quiet spot</li>
+          <li>Carrier for vet visits</li>
+          <li>Wand, ball, and puzzle toys</li>
+          <li>Water fountain (encourages drinking)</li>
+          <li>Nail clippers + grooming brush</li>
+          <li>Vet appointment within first week</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="tab-content" id="tabSupplies">
+    <div class="supplies-content">
+      <div class="supply-card wide">
+        <h3>Cat Food</h3>
+        <p><strong>Dry:</strong> Orijen Original, Royal Canin Indoor, Blue Buffalo Wilderness. <strong>Wet:</strong> Tiki Cat After Dark, Wellness CORE, Hill's Science Diet. Look for real meat first ingredient, high protein, low carbs.</p>
+        <div class="supply-links">
+          <a href="https://www.chewy.com/s?query=premium+cat+food" target="_blank" rel="noopener">Chewy</a>
+          <a href="https://www.amazon.com/s?k=premium+cat+food" target="_blank" rel="noopener">Amazon</a>
+          <a href="https://www.petsmart.com/search/?q=cat+food" target="_blank" rel="noopener">PetSmart</a>
+        </div>
+      </div>
+      <div class="supply-card">
+        <h3>Litter &amp; Box</h3>
+        <p><strong>Litter:</strong> World's Best, Dr. Elsey's Ultra, Arm & Hammer Clump & Seal. <strong>Boxes:</strong> Modkat XL, IRIS Open, Nature's Miracle Hooded. One box per cat + one extra.</p>
+        <div class="supply-links">
+          <a href="https://www.chewy.com/s?query=cat+litter+box" target="_blank" rel="noopener">Chewy</a>
+          <a href="https://www.amazon.com/s?k=cat+litter+supplies" target="_blank" rel="noopener">Amazon</a>
+        </div>
+      </div>
+      <div class="supply-card">
+        <h3>Cat Trees &amp; Scratching</h3>
+        <p><strong>Trees:</strong> Frisco 72-in, Vesper V-High, Mau Century. <strong>Scratchers:</strong> SmartCat Ultimate Post, KONG Naturals. Sisal rope is most durable. Place near sleeping areas.</p>
+        <div class="supply-links">
+          <a href="https://www.chewy.com/s?query=cat+tree+scratching+post" target="_blank" rel="noopener">Chewy</a>
+          <a href="https://www.amazon.com/s?k=cat+tree+scratching" target="_blank" rel="noopener">Amazon</a>
+        </div>
+      </div>
+      <div class="supply-card">
+        <h3>Beds &amp; Comfort</h3>
+        <p>Furhaven Donut, K&H Heated Bed, AmazonBasics Pet Bed. Raised edges for security. Self-warming for seniors. Place in quiet, warm areas.</p>
+        <div class="supply-links">
+          <a href="https://www.chewy.com/s?query=cat+bed+donut" target="_blank" rel="noopener">Chewy</a>
+          <a href="https://www.petco.com/shop/en/petcostore/search?text=cat+bed" target="_blank" rel="noopener">Petco</a>
+        </div>
+      </div>
+      <div class="supply-card">
+        <h3>Toys &amp; Enrichment</h3>
+        <p><strong>Interactive:</strong> Da Bird Wand, Cat Dancer. <strong>Puzzle:</strong> Trixie 5-in-1, Nina Ottosson. <strong>Automated:</strong> SmartyKat Hot Pursuit, HEXBUG Mouse. Rotate toys weekly.</p>
+        <div class="supply-links">
+          <a href="https://www.chewy.com/s?query=interactive+cat+toys" target="_blank" rel="noopener">Chewy</a>
+          <a href="https://www.amazon.com/s?k=cat+puzzle+toys+interactive" target="_blank" rel="noopener">Amazon</a>
+        </div>
+      </div>
+      <div class="supply-card">
+        <h3>Feeders &amp; Fountains</h3>
+        <p><strong>Fountains:</strong> Catit Flower, Drinkwell 360, Pioneer Pet Raindrop. <strong>Feeders:</strong> SureFeed Microchip, Outward Hound Slow Feeder. Stainless steel resists bacteria.</p>
+        <div class="supply-links">
+          <a href="https://www.chewy.com/s?query=cat+water+fountain+feeder" target="_blank" rel="noopener">Chewy</a>
+          <a href="https://www.amazon.com/s?k=cat+automatic+feeder+fountain" target="_blank" rel="noopener">Amazon</a>
+        </div>
+      </div>
+      <div class="supply-card">
+        <h3>Grooming Tools</h3>
+        <p><strong>Brushes:</strong> FURminator, Hertzko Slicker, KONG ZoomGroom. <strong>Nails:</strong> Millers Forge Clipper. <strong>Other:</strong> TropiClean Dental Gel, Vet's Best Ear Wipes.</p>
+        <div class="supply-links">
+          <a href="https://www.chewy.com/s?query=cat+grooming+brush" target="_blank" rel="noopener">Chewy</a>
+          <a href="https://www.petsmart.com/search/?q=cat+grooming+tools" target="_blank" rel="noopener">PetSmart</a>
+        </div>
+      </div>
+      <div class="supply-card">
+        <h3>Carriers &amp; Travel</h3>
+        <p>Sherpa Deluxe (airline-approved), Sleepypod Air, AmazonBasics Soft-Sided. Line with blanket + Feliway spray. Secure with seatbelt.</p>
+        <div class="supply-links">
+          <a href="https://www.chewy.com/s?query=cat+carrier+soft+sided" target="_blank" rel="noopener">Chewy</a>
+          <a href="https://www.amazon.com/s?k=cat+carrier+airline+approved" target="_blank" rel="noopener">Amazon</a>
+        </div>
+      </div>
+      <div class="supply-card">
+        <h3>Health &amp; Wellness</h3>
+        <p><strong>Supplements:</strong> Nordic Naturals Omega-3, FortiFlora Probiotics. <strong>Pheromones:</strong> Feliway Diffuser. <strong>Flea:</strong> Revolution, Frontline Plus. Always consult your vet.</p>
+        <div class="supply-links">
+          <a href="https://www.chewy.com/s?query=cat+health+supplements" target="_blank" rel="noopener">Chewy</a>
+          <a href="https://www.petco.com/shop/en/petcostore/search?text=cat+wellness" target="_blank" rel="noopener">Petco</a>
+        </div>
+      </div>
+      <div class="supply-card wide">
+        <h3>Where to Buy: Comparison</h3>
+        <table class="supply-table">
+          <tr><th>Store</th><th>Best For</th><th>Shipping</th><th>Returns</th></tr>
+          <tr><td><a href="https://www.chewy.com/" target="_blank" rel="noopener">Chewy</a></td><td>Wide selection, autoship, 24/7 customer service</td><td>Free over $49 (1-3 days)</td><td>365-day returns</td></tr>
+          <tr><td><a href="https://www.amazon.com/pet-supplies/" target="_blank" rel="noopener">Amazon</a></td><td>Fast delivery, Prime benefits, competitive pricing</td><td>Free with Prime (1-2 days)</td><td>30-day returns</td></tr>
+          <tr><td><a href="https://www.petsmart.com/" target="_blank" rel="noopener">PetSmart</a></td><td>In-store pickup, Treats rewards, grooming services</td><td>Free over $49 (3-5 days)</td><td>60-day returns</td></tr>
+          <tr><td><a href="https://www.petco.com/" target="_blank" rel="noopener">Petco</a></td><td>Vet services, Vital Care rewards, same-day delivery</td><td>Free over $49 (2-5 days)</td><td>30-day returns</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="tab-content" id="tabMatch">
+    <div class="match-layout">
+      <div class="match-filters">
+        <h3>Your Preferences</h3>
+        <p class="match-desc">Drag sliders to set your preferences. We score every breed and rank the best matches.</p>
+        <div class="match-group"><label>Family Affection</label><div class="range-row"><span>Independent</span><input type="range" id="mf_family" min="0" max="5" value="3" step="1" oninput="runMatch()"><span>Snuggly</span><span class="range-val" id="mf_family_v">3</span></div></div>
+        <div class="match-group"><label>Children Compatibility</label><div class="range-row"><span>Aloof</span><input type="range" id="mf_children" min="0" max="5" value="3" step="1" oninput="runMatch()"><span>Gentle</span><span class="range-val" id="mf_children_v">3</span></div></div>
+        <div class="match-group"><label>Other Pets Friendly</label><div class="range-row"><span>Territorial</span><input type="range" id="mf_pets" min="0" max="5" value="3" step="1" oninput="runMatch()"><span>Friendly</span><span class="range-val" id="mf_pets_v">3</span></div></div>
+        <div class="match-group"><label>Playfulness</label><div class="range-row"><span>Calm</span><input type="range" id="mf_playful" min="0" max="5" value="3" step="1" oninput="runMatch()"><span>Energetic</span><span class="range-val" id="mf_playful_v">3</span></div></div>
+        <div class="match-group"><label>Intelligence</label><div class="range-row"><span>Easy-going</span><input type="range" id="mf_intel" min="0" max="5" value="3" step="1" oninput="runMatch()"><span>Bright</span><span class="range-val" id="mf_intel_v">3</span></div></div>
+        <div class="match-group"><label>Shedding Tolerance</label><div class="range-row"><span>Minimal OK</span><input type="range" id="mf_shed" min="1" max="5" value="3" step="1" oninput="runMatch()"><span>Don't Mind</span><span class="range-val" id="mf_shed_v">3</span></div></div>
+        <div class="match-group"><label>Grooming Effort</label><div class="range-row"><span>Low effort</span><input type="range" id="mf_groom" min="1" max="5" value="3" step="1" oninput="runMatch()"><span>Don't mind</span><span class="range-val" id="mf_groom_v">3</span></div></div>
+        <div class="match-group"><label>Health Robustness</label><div class="range-row"><span>Sensitive</span><input type="range" id="mf_health" min="0" max="5" value="3" step="1" oninput="runMatch()"><span>Sturdy</span><span class="range-val" id="mf_health_v">3</span></div></div>
+        <div class="match-group"><label>Weight Preference</label><div class="range-row"><span>Small (under 8lbs)</span><input type="range" id="mf_weight" min="0" max="20" value="10" step="1" oninput="runMatch()"><span>Large (over 15lbs)</span><span class="range-val" id="mf_weight_v">10lbs</span></div></div>
+        <div class="match-group"><label>Minimum Lifespan</label><div class="range-row"><span>8 yrs</span><input type="range" id="mf_life" min="8" max="20" value="12" step="1" oninput="runMatch()"><span>20 yrs</span><span class="range-val" id="mf_life_v">12yrs</span></div></div>
+        <button class="match-reset" onclick="resetMatch()">Reset All</button>
+      </div>
+      <div class="match-results" id="matchResults">
+        <div class="match-placeholder">Adjust the sliders to find your perfect cat breed match.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="sources">
+    <strong>Breed data</strong> -- trait ratings, origin, weight, lifespan, and primary image from <a href="https://api-ninjas.com/api/cats" target="_blank">API Ninjas Cats API</a><br>
+    <strong>Additional images</strong> -- fetched via <a href="https://en.wikipedia.org/w/api.php" target="_blank">Wikipedia API</a> from breed-specific pages<br>
+    <strong>Prices</strong> -- real market ranges sourced from breeder directories and pet industry listings (70+ breeds covered; formula-based fallback for uncommon breeds)<br>
+    <strong>Care guide, product recs, and buying guide</strong> -- generated from breed traits by this tool<br>
+    <strong>Store links</strong> -- direct to <a href="https://www.chewy.com/" target="_blank">Chewy</a>, <a href="https://www.amazon.com/" target="_blank">Amazon</a>, <a href="https://www.petsmart.com/" target="_blank">PetSmart</a>, and <a href="https://www.petco.com/" target="_blank">Petco</a> with breed-specific search queries
+  </div>
+  Built for educational purposes. Always consult a veterinarian for pet care decisions.
+</footer>
+
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+const API_KEY = 'baLs9BAL9LU3O3fOApeSbBpCOE0HtQZI5TYT0ZTn';
+let allCats = [];
+let filteredCats = [];
+let carouselState = {};
+let wikiFetchStarted = false;
+let audioCtx = null;
+let searchDebounce = null;
+
+function toggleTheme() {
+  const d = document.documentElement;
+  const isDark = d.getAttribute('data-theme') === 'dark';
+  d.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  localStorage.setItem('catologue-theme', isDark ? 'light' : 'dark');
+}
+function initTheme() {
+  const saved = localStorage.getItem('catologue-theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+  else if (window.matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.setAttribute('data-theme', 'dark');
+}
+initTheme();
+
+function debounceRender() {
+  clearTimeout(searchDebounce);
+  searchDebounce = setTimeout(() => requestAnimationFrame(renderCats), 150);
+}
+function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+function playSound(type) {
+  try {
+    initAudio();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const t = audioCtx.currentTime;
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    if (type === 'click') { o.type='sine'; o.frequency.setValueAtTime(800,t); o.frequency.exponentialRampToValueAtTime(400,t+0.08); g.gain.setValueAtTime(0.06,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.08); o.start(t); o.stop(t+0.08); }
+    else if (type === 'open') { o.type='sine'; o.frequency.setValueAtTime(500,t); o.frequency.exponentialRampToValueAtTime(900,t+0.2); g.gain.setValueAtTime(0.05,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.25); o.start(t); o.stop(t+0.25); }
+    else if (type === 'close') { o.type='sine'; o.frequency.setValueAtTime(700,t); o.frequency.exponentialRampToValueAtTime(300,t+0.15); g.gain.setValueAtTime(0.04,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.18); o.start(t); o.stop(t+0.18); }
+    else if (type === 'switch') { o.type='triangle'; o.frequency.setValueAtTime(600,t); o.frequency.linearRampToValueAtTime(800,t+0.06); g.gain.setValueAtTime(0.03,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.08); o.start(t); o.stop(t+0.08); }
+    else if (type === 'nav') { o.type='sine'; o.frequency.setValueAtTime(1000,t); o.frequency.linearRampToValueAtTime(600,t+0.05); g.gain.setValueAtTime(0.04,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.06); o.start(t); o.stop(t+0.06); }
+  } catch(e) {}
+}
+
+async function fetchAllCats() {
+  const status = document.getElementById('status');
+  const skeleton = document.getElementById('skeleton');
+  const content = document.getElementById('content');
+  skeleton.innerHTML = Array(8).fill(`<div class="skel-card"><div class="skel-img"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div></div></div>`).join('');
+
+  const seen = new Set();
+  const mainFilters = ['min_weight=1','max_weight=30','playfulness=3','shedding=3','min_life_expectancy=10'];
+
+  for (const filter of mainFilters) {
+    let offset = 0, batch = [];
+    do {
+      status.innerHTML = `<div class="spinner"></div><p style="margin-top:0.8rem;font-size:0.9rem">Loading... (${allCats.length} breeds)</p>`;
+      try {
+        const res = await fetch(`https://api.api-ninjas.com/v1/cats?${filter}&offset=${offset}`, { headers: { 'X-Api-Key': API_KEY } });
+        if (!res.ok) break;
+        batch = await res.json();
+        if (!Array.isArray(batch) || batch.length === 0) break;
+        for (const cat of batch) { if (!seen.has(cat.name)) { seen.add(cat.name); allCats.push(cat); } }
+        offset += 20;
+        if (filter !== mainFilters[0]) await new Promise(r => setTimeout(r, 100));
+      } catch(e) { break; }
+    } while (batch.length === 20);
+    if (allCats.length > 0 && filter === mainFilters[0]) break;
+  }
+
+  if (allCats.length < 30) {
+    const backups = ['playfulness=1','playfulness=5','family_friendly=1','family_friendly=5','intelligence=1','intelligence=5','children_friendly=1','children_friendly=5','grooming=1','grooming=5'];
+    for (const filter of backups) {
+      if (allCats.length > 60) break;
+      try {
+        const res = await fetch(`https://api.api-ninjas.com/v1/cats?${filter}&offset=0`, { headers: { 'X-Api-Key': API_KEY } });
+        if (!res.ok) continue;
+        const batch = await res.json();
+        if (!Array.isArray(batch)) continue;
+        for (const cat of batch) { if (!seen.has(cat.name)) { seen.add(cat.name); allCats.push(cat); } }
+      } catch(e) {}
+    }
+  }
+
+  if (allCats.length === 0) { status.innerHTML = '<p style="color:var(--con);font-weight:600">Could not load breeds.</p>'; skeleton.style.display='none'; return; }
+  if (!seen.has('Tabby')) {
+    allCats.push({
+      name:'Tabby', origin:'Worldwide', image_link:'https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=600&h=400&fit=crop',
+      length:'12-18 inches', min_weight:8, max_weight:14, min_life_expectancy:12, max_life_expectancy:18,
+      family_friendly:4, children_friendly:4, other_pets_friendly:4,
+      playfulness:4, intelligence:4, general_health:4, shedding:3, grooming:3,
+      _tabbyImages: true
+    });
+  }
+  status.style.display='none'; skeleton.style.display='none'; content.style.display='block';
+  document.getElementById('fetchNote').textContent = `${allCats.length} breeds loaded`;
+
+  window.lazyObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.style.background='var(--bg)'; window.lazyObserver.unobserve(e.target); } });
+  });
+  for (const cat of allCats) { cat._images = []; if (cat.image_link) cat._images.push(cat.image_link); }
+  renderCats(); renderLeaderboard(); fetchWikipediaImages();
+}
+
+function getCareGuide(cat) {
+  const g=cat.grooming||3,s=cat.shedding||3,p=cat.playfulness||3,h=cat.general_health||3,i=cat.intelligence||3,w=cat.min_weight||8,l=cat.max_life_expectancy||15;
+  return {
+    grooming: g<=2?'Daily brush + pro grooming every 4-6 weeks. Bathe monthly. Trim nails weekly.':g<=3?'Brush 3-4x/week. Nail trims every 10-14 days. Bathe every 6-8 weeks.':'Weekly brush. Nail trims every 2-3 weeks. Bathe every 2-3 months.',
+    shedding: s>=4?'Heavy shedder -- brush daily with deshedding tool. Vacuum 3-4x/week. Omega-3s help.':s<=2?'Minimal shedding -- brush weekly. Occasional damp wipe keeps coat glossy.':'Moderate shedding -- brush 2-3x/week. Vacuum 2x/week.',
+    exercise: p>=4?'45-60 min/day split into 3 sessions. Tall cat tree, wall shelves, cat wheel recommended.':p<=2?'15-20 min gentle play 2x/day. Small cat tree, window perch, puzzle feeder.':'30-40 min/day across 2-3 sessions. Medium cat tree. Rotate toys weekly.',
+    enrichment: i>=4?'Puzzle toys for every meal. Teach tricks via clicker training. Rotate activities daily.':'Simple puzzles, treat-dispensing balls, window perch. 5 min training sessions.',
+    health: h<=2?'Vet every 6 months. Budget $500-1,000/yr for preventive care. Pet insurance strongly recommended.':'Annual vet visits. Budget $300-600/yr. Routine vaccines and dental care.',
+    diet: w>=10?'3-4 measured meals/day. 1/2-3/4 cup high-protein dry + 1 can wet. Elevated feeder helps.':'2-3 meals/day. 1/3-1/2 cup quality dry + 1/2 can wet. Fountain water recommended.',
+    lifespan: `Typically lives ${l-2}-${l} years. Maintain ideal weight, vet screenings after 7, indoor-only, daily enrichment.`
+  };
+}
+
+function getProductRecs(cat) {
+  const p=cat.playfulness||3,s=cat.shedding||3,h=cat.general_health||3,w=cat.min_weight||8;
+  return {
+    toys: p>=4?'Da Bird wand ($12-15), SmartyKat Hot Pursuit ($25), Nina Ottosson puzzle ($35). Rotate every 3 days.':p<=2?'KONG plush ($10-15), Yeowww! banana ($10), crinkle tunnel ($20-30). Gentle play only.':'Da Bird ($12), KONG spiral ($12), Trixie puzzle ($25). Rotate weekly.',
+    food: h<=2?'Hill\'s z/d ($45-60), Tiki Cat After Dark ($30-45), FortiFlora probiotic ($25). 75%+ wet food.':w>=10?'Orijen Original ($50-65), Wellness CORE wet ($28-38), Cosequin joints ($25-35). 3/4 cup + 1 can daily.':'Orijen ($50-65) or Acana ($40-55) dry. Tiki Cat ($30-40) wet. 1/3 cup dry + 1/2 can daily.',
+    bed: s>=4?'K&H heated bed ($45-65), Frisco bolster ($30-45). Wash weekly in hypoallergenic detergent.':'Furhaven donut ($30-40) or AmazonBasics heated ($35-50). Place in 2-3 locations.',
+    tree: p>=4?'Frisco 72-in ($85-120) or Mau Century ($180-250). Add wall shelves + cat wheel ($250-300).':p<=2?'Vesper V-High ($60-80) or Frisco 34-in ($45-60). Window perch ($25-35) recommended.':'Frisco 52-in ($60-85) or Vesper V-Tower ($100-130). Place in high-traffic area.',
+    feeder: h<=2||w>=10?'Outward Hound slow bowl ($15-20). SureFeed microchip feeder ($150-200) for multi-cat. Use stainless steel only.':'Catit Soho bowls ($20-25). Drinkwell 360 fountain ($50-65). Flat wide bowls prevent whisker fatigue.'
+  };
+}
+
+async function fetchWikipediaImages() {
+  if (wikiFetchStarted) return;
+  wikiFetchStarted = true;
+  const queries = [name => `${name} cat`, name => `${name} cat breed`, name => name];
+
+  const tabbyImages = [
+    'https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=600&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1543852786-1cf6534b4f5b?w=600&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1589883661923-6476cb0ae9f2?w=600&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1571566882372-1598d4abd4c4?w=600&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1519052537078-e6302a4968d4?w=600&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1596854407944-bf87f85f7ad1?w=600&h=400&fit=crop'
+  ];
+
+  for (let i = 0; i < allCats.length; i++) {
+    const cat = allCats[i];
+    const seenUrls = new Set(cat._images);
+
+    if (cat._tabbyImages) {
+      for (const url of tabbyImages) {
+        if (seenUrls.size < 6 && !seenUrls.has(url)) { seenUrls.add(url); cat._images.push(url); }
+      }
+      cat._wikiLoaded = true;
+      updateCardImages(cat);
+      continue;
+    }
+
+    for (const mkQuery of queries) {
+      if (seenUrls.size >= 6) break;
+      try {
+        const q = mkQuery(cat.name);
+        const sr = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(q)}&format=json&origin=*&srlimit=1`, { signal: AbortSignal.timeout(4000) });
+        if (!sr.ok) continue;
+        const sd = await sr.json();
+        const pt = sd.query?.search?.[0]?.title;
+        if (!pt) continue;
+
+        const ir = await fetch(`https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(pt)}&prop=pageimages|images&format=json&origin=*&pithumbsize=800&imlimit=12`, { signal: AbortSignal.timeout(5000) });
+        if (!ir.ok) continue;
+        const id = await ir.json();
+        const pgs = Object.values(id.query?.pages||{});
+        if (!pgs[0]) continue;
+
+        const thumb = pgs[0].thumbnail?.source;
+        if (thumb && !seenUrls.has(thumb)) { seenUrls.add(thumb); cat._images.push(thumb); }
+
+        if (seenUrls.size < 6 && pgs[0].images) {
+          const names = pgs[0].images.map(p=>p.title).filter(t=>/\.(jpg|jpeg|png)$/i.test(t)).filter(t=>!t.toLowerCase().includes('icon')&&!t.toLowerCase().includes('logo')&&!t.toLowerCase().includes('wikimedia')).slice(0,10);
+          for (const n of names) {
+            if (seenUrls.size >= 6) break;
+            try {
+              const iir = await fetch(`https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(n)}&prop=imageinfo&iiprop=url&format=json&origin=*`, { signal: AbortSignal.timeout(4000) });
+              if (!iir.ok) continue;
+              const iid = await iir.json();
+              const url = Object.values(iid.query?.pages||{})[0]?.imageinfo?.[0]?.url;
+              if (url && !seenUrls.has(url)) { seenUrls.add(url); cat._images.push(url); }
+            } catch(e) {}
+          }
+        }
+      } catch(e) {}
+    }
+
+    if (cat._images.length === 0 && cat.image_link) cat._images.push(cat.image_link);
+    cat._wikiLoaded = true;
+    updateCardImages(cat);
+  }
+}
+
+function updateCardImages(cat) {
+  const el = document.getElementById(`cc-${allCats.indexOf(cat)}`);
+  if (!el) return;
+  const track = el.querySelector('.carousel-track');
+  if (!track) return;
+  el.querySelectorAll('.carousel-btn, .carousel-dot, .carousel-count').forEach(e=>e.remove());
+   track.innerHTML = cat._images.map(s=>`<img src="${s}" alt="${cat.name}" loading="lazy" onerror="this.style.display='none';this.parentElement.style.justifyContent='center'">`).join('');
+  track.style.transform = 'translateX(0)';
+  if (cat._images.length > 1) {
+    el.insertAdjacentHTML('beforeend', `<span class="carousel-count">1/${cat._images.length}</span><button class="carousel-btn prev" onclick="moveCarousel('cc-${allCats.indexOf(cat)}',-1)">&lsaquo;</button><button class="carousel-btn next" onclick="moveCarousel('cc-${allCats.indexOf(cat)}',1)">&rsaquo;</button><div class="carousel-dots">${cat._images.map((_,i)=>`<button class="carousel-dot${i===0?' active':''}" onclick="goCarousel('cc-${allCats.indexOf(cat)}',${i})"></button>`).join('')}</div>`);
+  }
+  initCarousel(`cc-${allCats.indexOf(cat)}`, cat._images.length);
+}
+
+function getPrice(cat) {
+  const prices = {
+    'Abyssinian':[800,1500],'Aegean':[600,1000],'American Bobtail':[600,1200],'American Curl':[800,1200],
+    'American Shorthair':[500,1200],'American Wirehair':[800,1200],'Arabian Mau':[0,100],'Australian Mist':[600,1000],
+    'Balinese':[800,1500],'Bambino':[1200,2500],'Bengal':[1500,4000],'Birman':[600,1300],'Bombay':[600,1200],
+    'British Longhair':[800,1500],'British Shorthair':[1000,2000],'Burmese':[600,1200],'Burmilla':[600,1200],
+    'California Spangled':[800,2000],'Chantilly-Tiffany':[600,1000],'Chartreux':[1000,1800],'Chausie':[800,2000],
+    'Cheetoh':[1500,3000],'Colorpoint Shorthair':[600,1200],'Cornish Rex':[1000,1800],'Cymric':[600,1200],
+    'Cyprus':[0,100],'Devon Rex':[1000,2000],'Donskoy':[1500,3000],'Dragon Li':[500,800],
+    'Egyptian Mau':[800,1500],'European Burmese':[600,1200],'Exotic Shorthair':[1000,2000],
+    'Havana Brown':[800,1500],'Himalayan':[500,1500],'Japanese Bobtail':[600,1200],'Javanese':[600,1200],
+    'Khao Manee':[800,1500],'Korat':[600,1200],'Kurilian Bobtail':[600,1200],'LaPerm':[600,1200],
+    'Lykoi':[1500,2500],'Maine Coon':[1000,2500],'Manx':[500,1200],'Mekong Bobtail':[500,1000],
+    'Minskin':[1200,2500],'Napoleon':[1000,2000],'Norwegian Forest Cat':[800,1500],'Ocicat':[800,1500],
+    'Oriental':[600,1200],'Persian':[500,1500],'Peterbald':[1200,3000],'Pixie-bob':[600,1200],
+    'Ragamuffin':[800,1500],'Ragdoll':[1000,2500],'Russian Blue':[800,1500],'Savannah':[1500,20000],
+    'Scottish Fold':[800,1500],'Selkirk Rex':[800,1500],'Serengeti':[800,1500],'Siamese':[600,1500],
+    'Siberian':[1000,2500],'Singapura':[800,1500],'Snowshoe':[600,1200],'Somali':[800,1500],
+    'Sphynx':[1500,3000],'Sukoke':[600,1000],'Thai':[600,1200],'Tonkinese':[600,1200],
+    'Toyger':[1000,3000],'Turkish Angora':[800,1500],'Turkish Van':[800,1500],'Ukrainian Levkoy':[1000,2000],
+    'York Chocolate':[600,1000],
+    'Tabby':[0,200],'Classic Tabby':[0,200],'Mackerel Tabby':[0,200],'Spotted Tabby':[0,200],'Ticked Tabby':[0,200],
+    'Patched Tabby':[0,200],'Brown Tabby':[0,200],'Orange Tabby':[0,200],'Silver Tabby':[0,200],'Domestic Tabby':[0,200]
+  };
+  const known = prices[cat.name];
+  if (known) return {min:known[0], max:known[1]};
+  let b=500; b+=(cat.family_friendly||3)*50; b+=(cat.playfulness||3)*40; b+=(cat.intelligence||3)*60; b+=(cat.general_health||3)*30;
+  if (cat.shedding<=2) b+=100; if (cat.grooming>=4) b+=80; if (cat.children_friendly>=4) b+=60; b+=(cat.min_life_expectancy||10)*20;
+  const m=Math.round(b/50)*50;
+  return {min:m, max:m+400+((seed(cat.name)%300)/50|0)*50};
+}
+function seed(s) { let h=0; for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0} return Math.abs(h); }
+
+function getPros(cat) {
+  const p=[];
+  if (cat.family_friendly>=4) p.push('Affectionate with family');
+  if (cat.children_friendly>=4) p.push('Great with children');
+  if (cat.other_pets_friendly>=4) p.push('Gets along with other pets');
+  if (cat.playfulness>=4) p.push('Very playful');
+  if (cat.intelligence>=4) p.push('Highly intelligent');
+  if (cat.general_health>=4) p.push('Good general health');
+  if (cat.shedding<=2) p.push('Minimal shedding');
+  if (cat.grooming>=4) p.push('Low grooming needs');
+  if (!p.length) p.push('Balanced temperament');
+  return p;
+}
+function getCons(cat) {
+  const c=[];
+  if (cat.family_friendly<=2) c.push('Not very affectionate');
+  if (cat.children_friendly<=2) c.push('Not ideal with children');
+  if (cat.other_pets_friendly<=2) c.push('Not great with other pets');
+  if (cat.playfulness<=2) c.push('Low energy');
+  if (cat.intelligence<=2) c.push('Less trainable');
+  if (cat.general_health<=2) c.push('Potential health concerns');
+  if (cat.shedding>=4) c.push('Heavy shedding');
+  if (cat.grooming<=2) c.push('High grooming maintenance');
+  if (!c.length) c.push('Generally easygoing');
+  return c;
+}
+function getAbout(cat) {
+  const h=[];
+  if (cat.playfulness>=4) h.push('playful');
+  if (cat.family_friendly>=4) h.push('affectionate');
+  if (cat.intelligence>=4) h.push('intelligent');
+  if (cat.children_friendly>=4) h.push('great with kids');
+  if (cat.other_pets_friendly>=4) h.push('pet-friendly');
+  const t = h.length ? h.join(', ') : 'calm & independent';
+  const n = cat.general_health>=4 ? 'robust' : cat.general_health<=2 ? 'sensitive' : 'average';
+  const s = cat.children_friendly>=4 && cat.family_friendly>=4 ? 'great for families' : cat.playfulness>=4 ? 'best for active owners' : 'suits most homes';
+  return `${cat.name} (${cat.origin||'unknown'}) -- ${cat.min_weight}-${cat.max_weight} lbs, ${cat.min_life_expectancy}-${cat.max_life_expectancy} yrs. ${t}. Health: ${n}. ${s}.`;
+}
+
+const TRAIT_COLORS = { family_friendly:'#3d7e7a', children_friendly:'#3d7e7a', other_pets_friendly:'#3d7e7a', playfulness:'#3d7e7a', intelligence:'#3d7e7a', general_health:'#3d7e7a', shedding:'#3d7e7a', grooming:'#3d7e7a' };
+const TRAIT_LABELS = { family_friendly:'Family', children_friendly:'Children', other_pets_friendly:'Pets', playfulness:'Playful', intelligence:'Intelligent', general_health:'Health', shedding:'Shedding', grooming:'Grooming' };
+
+function carouselHTML(images, prefix) {
+  const slides = images.map(s=>`<img class="img-shimmer" src="${s}" alt="" loading="lazy" onerror="this.style.display='none'" onload="this.classList.remove('img-shimmer')">`).join('');
+  const cnt = images.length>1 ? `<span class="carousel-count">1/${images.length}</span>` : '';
+  const btns = images.length>1 ? `<button class="carousel-btn prev" onclick="moveCarousel('${prefix}',-1);event.stopPropagation()">&lsaquo;</button><button class="carousel-btn next" onclick="moveCarousel('${prefix}',1);event.stopPropagation()">&rsaquo;</button><div class="carousel-dots">${images.map((_,i)=>`<button class="carousel-dot${i===0?' active':''}" onclick="event.stopPropagation();goCarousel('${prefix}',${i})"></button>`).join('')}</div>` : '';
+  return `<div class="carousel" id="${prefix}" data-count="${images.length}"><div class="carousel-track">${slides}</div>${cnt}${btns}</div>`;
+}
+function moveCarousel(id, dir) {
+  const c = carouselState[id];
+  if (c) goCarousel(id, Math.max(0, Math.min(c.total-1, c.current+dir)));
+}
+function goCarousel(id, idx) {
+  const c = carouselState[id];
+  if (!c || idx===c.current) return;
+  playSound('nav');
+  c.current = idx;
+  setCarouselPos(id, idx);
+}
+function setCarouselPos(id, idx) {
+  const tr = document.querySelector(`#${id} .carousel-track`);
+  if (tr) tr.style.transform = `translateX(-${idx*100}%)`;
+  document.querySelectorAll(`#${id} .carousel-dot`).forEach((d,i)=>d.classList.toggle('active',i===idx));
+  const ct = document.querySelector(`#${id} .carousel-count`);
+  if (ct) ct.textContent = `${idx+1}/${(carouselState[id]||{}).total||0}`;
+}
+function initCarousel(id, total) {
+  if (!carouselState[id]) carouselState[id] = {current:0,total};
+  else carouselState[id].total = total;
+  requestAnimationFrame(()=>addCarouselDrag(id));
+}
+function addCarouselDrag(id) {
+  const el = document.getElementById(id);
+  if (!el || el.dataset.dragInit) return;
+  el.dataset.dragInit = '1';
+  const track = el.querySelector('.carousel-track');
+  if (!track) return;
+  let startX=0, origX=0, dragging=false, moved=false;
+
+  el.addEventListener('mousedown',e=>{
+    if (e.button!==0) return;
+    startX=e.clientX; origX=getTranslateX(track); dragging=true; moved=false;
+    track.classList.add('dragging');
+    el.classList.add('show-btns');
+  });
+  window.addEventListener('mousemove',e=>{
+    if (!dragging) return;
+    const dx=e.clientX-startX;
+    track.style.transform=`translateX(${origX+dx}px)`;
+    moved=true;
+  });
+  window.addEventListener('mouseup',()=>{
+    if (!dragging) return;
+    dragging=false;
+    track.classList.remove('dragging');
+    const c=carouselState[id];
+    if (!c||!c.total) return;
+    const currX=getTranslateX(track);
+    const slideW=track.clientWidth/c.total||1;
+    const ratio=-currX/slideW;
+    const snapped=Math.round(ratio);
+    const idx=Math.max(0,Math.min(c.total-1,snapped));
+    if (moved && Math.abs(currX-origX)>20) {
+      goCarousel(id, idx);
+    } else {
+      setCarouselPos(id, c.current);
+    }
+    setTimeout(()=>el.classList.remove('show-btns'),2000);
+  });
+
+  el.addEventListener('touchstart',e=>{
+    startX=e.touches[0].clientX; origX=getTranslateX(track); dragging=true; moved=false;
+    track.classList.add('dragging');
+    el.classList.add('show-btns');
+  },{passive:true});
+  el.addEventListener('touchmove',e=>{
+    if (!dragging) return;
+    const dx=e.touches[0].clientX-startX;
+    track.style.transform=`translateX(${origX+dx}px)`;
+    moved=true;
+  },{passive:true});
+  el.addEventListener('touchend',()=>{
+    if (!dragging) return;
+    dragging=false;
+    track.classList.remove('dragging');
+    const c=carouselState[id];
+    if (!c||!c.total) return;
+    const currX=getTranslateX(track);
+    const slideW=track.clientWidth/c.total||1;
+    const ratio=-currX/slideW;
+    const snapped=Math.round(ratio);
+    const idx=Math.max(0,Math.min(c.total-1,snapped));
+    if (moved && Math.abs(currX-origX)>20) {
+      goCarousel(id, idx);
+    } else {
+      setCarouselPos(id, c.current);
+    }
+    setTimeout(()=>el.classList.remove('show-btns'),2000);
+  },{passive:true});
+}
+function getTranslateX(el) {
+  const m=el.style.transform.match(/translateX\(([^)]+)\)/);
+  return m?parseFloat(m[1]):0;
+}
+
+function renderCats() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const s = document.getElementById('sort').value;
+  filteredCats = allCats.filter(c=>c.name.toLowerCase().includes(q));
+  filteredCats.sort((a,b)=>{
+    if (s==='name') return a.name.localeCompare(b.name);
+    if (s==='shedding') return (a.shedding||3)-(b.shedding||3);
+    return (b[s]||0)-(a[s]||0);
+  });
+  document.getElementById('count').textContent = `Showing ${filteredCats.length} of ${allCats.length} breeds`;
+  const grid = document.getElementById('grid');
+  grid.innerHTML = filteredCats.map((cat,i)=>{
+    const pros=getPros(cat), cons=getCons(cat), price=getPrice(cat);
+    const imgs = cat._images.length ? cat._images : (cat.image_link ? [cat.image_link] : []);
+    const cid = `cc-${allCats.indexOf(cat)}`;
+    const imgH = imgs.length ? carouselHTML(imgs, cid) : `<div class="carousel" style="height:200px;background:var(--bg)"><div class="carousel-placeholder" style="height:200px">Cat</div></div>`;
+    return `<div class="card" onclick="openModal(${allCats.indexOf(cat)})" data-idx="${i}">${imgH}<div class="card-body"><h2>${cat.name}</h2><div class="origin-badge">${cat.origin||'Unknown origin'}</div><p class="about-text">${getAbout(cat)}</p><div class="lifespan-tag">${cat.min_life_expectancy}-${cat.max_life_expectancy} years</div><div class="meta-row"><span>${cat.min_weight}-${cat.max_weight} lbs</span><span>${cat.length||'Various'}</span></div><div class="price-row"><span class="label">Est. Price</span><span class="value">$${price.min} - $${price.max}</span></div><div class="quick-compare"><div class="pros"><h3>Pros</h3><ul>${pros.slice(0,2).map(p=>`<li>${p}</li>`).join('')}</ul></div><div class="cons"><h3>Cons</h3><ul>${cons.slice(0,2).map(c=>`<li>${c}</li>`).join('')}</ul></div></div><div class="view-link">View details &rarr;</div></div></div>`;
+  }).join('');
+  filteredCats.forEach(cat=>{const imgs=cat._images.length?cat._images:(cat.image_link?[cat.image_link]:[]);if(imgs.length)initCarousel(`cc-${allCats.indexOf(cat)}`,imgs.length);});
+  requestAnimationFrame(()=>{
+    const cards = document.querySelectorAll('.card');
+    cards.forEach((c,i)=>{ c.style.setProperty('--i',i); requestAnimationFrame(()=>c.classList.add('visible')); });
+  });
+  if (window.lazyObserver) { document.querySelectorAll('.card-img-placeholder, .carousel-placeholder').forEach(el => window.lazyObserver.observe(el)); }
+}
+
+function openModal(idx) {
+  playSound('open');
+  const cat=allCats[idx], pros=getPros(cat), cons=getCons(cat), price=getPrice(cat), care=getCareGuide(cat), recs=getProductRecs(cat);
+  const traits=['family_friendly','children_friendly','other_pets_friendly','playfulness','intelligence','general_health','shedding','grooming'];
+  const imgs = cat._images.length ? cat._images : (cat.image_link ? [cat.image_link] : []);
+  const bars = traits.map(t=>{const v=cat[t]||0;return `<div class="trait-bar"><span class="lbl">${TRAIT_LABELS[t]}</span><div class="bar"><div class="fill" style="width:${(v/5)*100}%"></div></div><span class="sc">${v}/5</span></div>`;}).join('');
+  const imgH = imgs.length ? carouselHTML(imgs,'mc') : `<div class="carousel" style="height:360px;background:var(--bg)"><div class="carousel-placeholder" style="height:360px">Cat</div></div>`;
+
+  document.getElementById('modalContent').innerHTML = `${imgH}<div class="modal-body"><h2>${cat.name}</h2><div class="origin">${cat.origin||'Unknown origin'}</div><p class="modal-about">${getAbout(cat)}</p><div class="stat-strip"><div class="item"><span class="num">${cat.min_weight}-${cat.max_weight}</span><span class="label">Weight (lbs)</span></div><div class="item"><span class="num">${cat.min_life_expectancy}-${cat.max_life_expectancy}</span><span class="label">Lifespan (yrs)</span></div><div class="item"><span class="num">${cat.length||'--'}</span><span class="label">Length</span></div></div><div class="modal-buy"><h3>Buying Info</h3><div class="price-line"><span class="lbl">Estimated Price:</span><span class="val">$${price.min} - $${price.max}</span></div><p>Prices vary by breeder, location, and pedigree. Adoption from shelters typically costs $50-$200.</p></div><div class="section"><h3>Care Guide</h3><div class="care-grid">${Object.entries(care).map(([k,v])=>`<div class="care-item"><h4>${k}</h4><p>${v}</p></div>`).join('')}</div></div><div class="section"><h3>Recommended Products</h3><div class="prod-grid">${Object.entries(recs).map(([k,v])=>{
+  const icons={toys:['T','#f0e4d8','#8b7355'],food:['F','#dce8d0','#4a7c59'],bed:['B','#e8f0f1','#3d7e7a'],tree:['C','#f5ecea','#b05a4a'],feeder:['W','#f5ede4','#c48b5a']};
+  const [ic,ibg,iclr]=icons[k]||['P','var(--bg)','var(--text-secondary)'];
+  return `<div class="prod-item"><div class="prod-icon" style="background:${ibg};color:${iclr}">${ic}</div><div class="prod-body"><h4>${k.charAt(0).toUpperCase()+k.slice(1)}</h4><p>${v}</p></div></div>`;
+}).join('')}</div></div><div class="section"><h3>Shop for ${cat.name}</h3><div class="shop-grid"><a class="shop-link" href="https://www.chewy.com/s?query=${encodeURIComponent(cat.name+' cat')}" target="_blank" rel="noopener"><span class="shop-icon" style="background:#fce4c8;color:#c48b5a">C</span><span class="shop-name">Chewy</span></a><a class="shop-link" href="https://www.amazon.com/s?k=${encodeURIComponent(cat.name+' cat supplies')}" target="_blank" rel="noopener"><span class="shop-icon" style="background:#f0e4d8;color:#8b7355">A</span><span class="shop-name">Amazon</span></a><a class="shop-link" href="https://www.petsmart.com/search/?q=${encodeURIComponent(cat.name+' cat')}" target="_blank" rel="noopener"><span class="shop-icon" style="background:#dce8f0;color:#4a7a9a">P</span><span class="shop-name">PetSmart</span></a><a class="shop-link" href="https://www.petco.com/shop/en/petcostore/search?text=${encodeURIComponent(cat.name+' cat')}" target="_blank" rel="noopener"><span class="shop-icon" style="background:#dce8f0;color:#4a7a9a">P</span><span class="shop-name">Petco</span></a></div></div><div class="section"><h3>Traits &amp; Ratings</h3>${bars}</div><div class="section"><h3>Pros &amp; Cons</h3><div class="modal-pc"><div class="pros"><h3>Pros</h3><ul>${pros.map(p=>`<li>${p}</li>`).join('')}</ul></div><div class="cons"><h3>Cons</h3><ul>${cons.map(c=>`<li>${c}</li>`).join('')}</ul></div></div></div></div>`;
+  if (imgs.length) initCarousel('mc', imgs.length);
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modal')) return;
+  playSound('close');
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+function getLBScore(cat, catg) {
+  if (catg==='least_maintenance') return (cat.grooming||3)*0.4 + (cat.general_health||3)*0.3 + (6-(cat.shedding||3))*0.3;
+  if (catg==='most_popular') return ((cat.playfulness||3)+(cat.family_friendly||3)+(cat.intelligence||3)+(cat.children_friendly||3)+(cat.other_pets_friendly||3)+(cat.general_health||3))/6;
+  return cat[catg]||0;
+}
+function getLBLabel(catg) {
+  const m={children_friendly:'Children Friendly',least_maintenance:'Least Maintenance',playfulness:'Playfulness',family_friendly:'Family Friendly',intelligence:'Intelligence',other_pets_friendly:'Pet Friendly',most_popular:'Popularity'};
+  return m[catg]||catg;
+}
+
+function renderLeaderboard() {
+  if (!allCats.length) return;
+  const catg = document.getElementById('lbCategory').value;
+  const label = getLBLabel(catg);
+  const sorted = [...allCats].sort((a,b)=>getLBScore(b,catg)-getLBScore(a,catg));
+  const top50 = sorted.slice(0,50);
+  const maxSc = getLBScore(sorted[0],catg)||1;
+  const color = '#3d7e7a';
+
+  const pod = top50.slice(0,3).map((cat,i)=>{
+    const sc = getLBScore(cat,catg);
+    const order = i===0?1:i===1?0:2;
+    const src = cat._images?.[0] || '';
+    return `<div class="podium-card ${i===0?'gold':''}" onclick="openModal(${allCats.indexOf(cat)})" style="order:${order}"><div class="rank">${i+1}</div>${src?`<img class="podium-img" src="${src}" alt="${cat.name}" loading="lazy">`:'<div class="podium-img podium-plh">Cat</div>'}<div class="name">${cat.name}</div><div class="sc">${label}: ${sc.toFixed(1)}</div></div>`;
+  }).join('');
+
+  const list = top50.slice(3).map((cat,i)=>{
+    const sc = getLBScore(cat,catg);
+    const pct = (sc/maxSc)*100;
+    return `<div class="lb-row" onclick="openModal(${allCats.indexOf(cat)})"><span class="pos">${i+4}</span><span class="rname">${cat.name}</span><div class="bar"><div class="fill" style="width:${pct}%;background:${color}"></div></div><span class="rsc">${sc.toFixed(1)}</span></div>`;
+  }).join('');
+
+  document.getElementById('leaderboardContent').innerHTML = `<div class="podium">${pod}</div><div class="lb-list">${list}</div>`;
+}
+
+function runMatch() {
+  if (!allCats.length) return;
+  const prefs = {
+    family: parseInt(document.getElementById('mf_family').value),
+    children: parseInt(document.getElementById('mf_children').value),
+    pets: parseInt(document.getElementById('mf_pets').value),
+    play: parseInt(document.getElementById('mf_playful').value),
+    intel: parseInt(document.getElementById('mf_intel').value),
+    shed: parseInt(document.getElementById('mf_shed').value),
+    groom: parseInt(document.getElementById('mf_groom').value),
+    health: parseInt(document.getElementById('mf_health').value),
+    weight: parseInt(document.getElementById('mf_weight').value),
+    life: parseInt(document.getElementById('mf_life').value)
+  };
+  document.getElementById('mf_family_v').textContent=prefs.family;
+  document.getElementById('mf_children_v').textContent=prefs.children;
+  document.getElementById('mf_pets_v').textContent=prefs.pets;
+  document.getElementById('mf_playful_v').textContent=prefs.play;
+  document.getElementById('mf_intel_v').textContent=prefs.intel;
+  document.getElementById('mf_shed_v').textContent=prefs.shed;
+  document.getElementById('mf_groom_v').textContent=prefs.groom;
+  document.getElementById('mf_health_v').textContent=prefs.health;
+  document.getElementById('mf_weight_v').textContent=prefs.weight+'lbs';
+  document.getElementById('mf_life_v').textContent=prefs.life+'yrs';
+
+  const scored = allCats.map(cat => {
+    let score = 0;
+    score += (5 - Math.abs((cat.family_friendly||3) - prefs.family)) * 10;
+    score += (5 - Math.abs((cat.children_friendly||3) - prefs.children)) * 10;
+    score += (5 - Math.abs((cat.other_pets_friendly||3) - prefs.pets)) * 10;
+    score += (5 - Math.abs((cat.playfulness||3) - prefs.play)) * 10;
+    score += (5 - Math.abs((cat.intelligence||3) - prefs.intel)) * 10;
+    score += Math.max(0, (5 - Math.abs((cat.shedding||3) - prefs.shed))) * 8;
+    score += Math.max(0, (5 - Math.abs((cat.grooming||3) - prefs.groom))) * 8;
+    score += (5 - Math.abs((cat.general_health||3) - prefs.health)) * 10;
+    const w = (cat.min_weight+cat.max_weight)/2;
+    score += Math.max(0, 20 - Math.abs(w - prefs.weight));
+    const l = (cat.min_life_expectancy+cat.max_life_expectancy)/2;
+    if (l >= prefs.life) score += 15;
+    else score += Math.max(0, l / prefs.life * 10);
+    return { cat, score: Math.round(score) };
+  });
+
+  scored.sort((a,b) => b.score - a.score);
+  const top = scored.slice(0, 30);
+  const maxScore = top[0]?.score || 1;
+  const color = '#3d7e7a';
+
+  const resultsHtml = top.map((item, i) => {
+    const cat = item.cat;
+    const pct = (item.score / maxScore) * 100;
+    return `<div class="match-row" onclick="openModal(${allCats.indexOf(cat)})" style="animation-delay:${i*0.03}s"><span class="m-pos">${i+1}</span><span class="m-name">${cat.name}</span><div class="m-bar"><div class="m-fill" style="width:${pct}%;background:${color}"></div></div><span class="m-sc">${item.score}%</span></div>`;
+  }).join('');
+
+  const top3 = top.slice(0,3);
+  const podHtml = top3.length ? `<div class="match-podium">${top3.map((item,i)=>{
+    const cat=item.cat;
+    const ord=i===0?1:i===1?0:2;
+    const imgs=cat._images.length?cat._images:(cat.image_link?[cat.image_link]:[]);
+    return `<div class="m-pod-card ${i===0?'m-gold':''}" onclick="openModal(${allCats.indexOf(cat)})" style="order:${ord}"><div class="m-pod-rank">${i+1}</div>${imgs[0]?`<img class="m-pod-img" src="${imgs[0]}" alt="${cat.name}" loading="lazy">`:`<div class="m-pod-img m-pod-plh">Cat</div>`}<div class="m-pod-name">${cat.name}</div><div class="m-pod-sc">${item.score}% match</div></div>`;
+  }).join('')}</div>`:'';
+
+  document.getElementById('matchResults').innerHTML = `${podHtml}<div class="match-list-label">All matches</div><div class="match-list">${resultsHtml}</div>`;
+}
+
+function resetMatch() {
+  document.getElementById('mf_family').value=3;
+  document.getElementById('mf_children').value=3;
+  document.getElementById('mf_pets').value=3;
+  document.getElementById('mf_playful').value=3;
+  document.getElementById('mf_intel').value=3;
+  document.getElementById('mf_shed').value=3;
+  document.getElementById('mf_groom').value=3;
+  document.getElementById('mf_health').value=3;
+  document.getElementById('mf_weight').value=10;
+  document.getElementById('mf_life').value=12;
+  runMatch();
+}
+
+function switchTab(tab) {
+  playSound('switch');
+  const tabs=['browse','leaderboard','guide','match','supplies'];
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',tabs[i]===tab));
+  document.querySelectorAll('.tab-content').forEach((c,i)=>c.classList.toggle('active',tabs[i]===tab));
+  if (tab==='leaderboard') renderLeaderboard();
+  if (tab==='match') runMatch();
+}
+
+document.getElementById('skeleton').innerHTML = Array(8).fill(`<div class="skel-card"><div class="skel-img"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div></div></div>`).join('');
+fetchAllCats();
+</script>
+</body>
+</html>
